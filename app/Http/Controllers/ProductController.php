@@ -21,36 +21,6 @@ class ProductController extends Controller
         $product = DB::table('shops')->get();
         return view('product.index')->with('product',$product);
     }
-    public function cart(){
-        return view('shop.cart');
-    }
-
-    public function cartAdd(Shop $shop){
-        $cart = session()->get('cart');
-        if(!$cart){
-            $cart =[
-                $shop->id => [
-                    'title' => $shop->title,
-                    'price' => $shop->price,
-                    'quantity' => 1,
-                    'product_code' => $shop->product_code,
-                ]
-
-                ];
-                $data = session()->put('cart');
-
-                return redirect()->route('product.cart')->with('success','Added to Cart');
-        }
-
-            if(isset($cart[$shop->id])){
-                    $cart[$shop->id]['quantity']++;
-                    $data = session()->put('cart',$cart);
-
-            }
-
-            return redirect()->route('product.cart')->with('success','Added to Cart');
-
-    }
 
 
     public function apply(Request $request){
@@ -60,32 +30,33 @@ class ProductController extends Controller
         // ->first();
 
        $coupon = $this->coupon->where('coupon_code',$request->coupon_code)->first();
+
        if($coupon){
            if($coupon->status == 'active'){
                $exp_date = $coupon->expiry_date;
                $current_date = date('Y-m-d');
-                if($exp_date > $current_date ){
+               if($exp_date > $current_date ){
 
-                    $total = 1000;
-                    if($coupon->coupon_type == 'amount'){
-                        $final_price = $total - $coupon->discount_value;
-                    } else{
-                        $final_price =$total * ($coupon->discount_value/100);
-                    }
-                            return view('product.index')
-                            ->with('total',$total)
-                            ->with('final_price',$final_price);
-                } else {
-                    return redirect()->route('product.index')->with('error','Coupon expired.Please try again');
+
+
+                return redirect()->route('product.cart')->with('success','Coupon applied');
+
+               } else {
+                    return redirect()->route('product.cart')->with('error','Coupon expired.Please try again');
                 }
             }
         } else{
-            return redirect()->route('product.index')->with('error','Invalid coupon code.Please try again');
-        }
-        session()->put('coupon',[
+            return redirect()->route('product.cart')->with('error','Invalid coupon code.Please try again');
+       }
+
+       $coupon = session()->get('coupon');
+       if(!$coupon){
+        $coupon= [
             'code' => $coupon->coupon_code,
-        ]);
+        ];
+
+        session()->put('coupon',$coupon);
+
     }
 
-
-}
+    }}

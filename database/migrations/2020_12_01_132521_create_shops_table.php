@@ -18,7 +18,6 @@ class CreateShopsTable extends Migration
             $table->string('title');
             $table->string('price');
             $table->string('product_code');
-            $table->string('session_id')->nullable();
             $table->timestamps();
         });
     }
