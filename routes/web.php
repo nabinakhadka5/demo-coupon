@@ -19,6 +19,5 @@ Route::get('/', function () {
 
 Route::resource('coupon','CouponController');
 Route::get('/product','ProductController@index')->name('product.index');
-Route::get('/total','ProductController@show')->name('product.show');
 
 Route::post('/product','ProductController@apply')->name('product.create');

@@ -8,8 +8,6 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     protected $coupon=null;
-    protected $total=null;
-
 
     public function __construct(Coupon $coupon){
         $this->coupon = $coupon;
@@ -17,7 +15,7 @@ class ProductController extends Controller
 
     public function index(Request $request){
 
-        return view('product.index')->with('total',$this->total);
+        return view('product.index');
     }
 
     public function apply(Request $request){
@@ -33,34 +31,26 @@ class ProductController extends Controller
            if($coupon->status == 'active'){
                $exp_date = $coupon->expiry_date;
                $current_date = date('Y-m-d');
-               if($exp_date > $current_date ){
+                if($exp_date > $current_date ){
 
-                $total = 5000;
-                if($coupon->coupon_type == 'amount'){
-                     $final_price = $total - $coupon->discount_value;
-                }
-
-                if($coupon->coupon_type == 'percentage'){
-                     $final_price = $total * ($coupon->discount_value/100);
-                }
-
-                return redirect()->route('product.show')
-                                    ->with('final_price',$final_price)
-                                    ->with('total',$total)
-                                    ->with('success','Coupon is valid!');
+                    $total = 1000;
+                    if($coupon->coupon_type == 'amount'){
+                        $final_price = $total - $coupon->discount_value;
+                    } else{
+                        $final_price =$total * ($coupon->discount_value/100);
+                    }
+                            return view('product.index')
+                            ->with('total',$total)
+                            ->with('final_price',$final_price);
                 } else {
                     return redirect()->route('product.index')->with('error','Coupon expired.Please try again');
                 }
             }
         } else{
-
             return redirect()->route('product.index')->with('error','Invalid coupon code.Please try again');
         }
-
         session()->put('coupon',[
             'code' => $coupon->coupon_code,
         ]);
-
-
     }
 }

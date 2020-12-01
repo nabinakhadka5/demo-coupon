@@ -28,7 +28,7 @@
             <td>{{ $data->coupon_type }}</td>
             <td>{{ $data->status }}</td>
             <td>
-            <form action="{{ route('coupon.destroy',$data->id) }}" method="post">
+            <form action="{{ route('coupon.destroy',$data->id) }}" class="d-none" method="post">
             @csrf
             @method('delete')
             <button class="btn btn-warning">delete</button>
