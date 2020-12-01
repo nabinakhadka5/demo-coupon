@@ -15,7 +15,8 @@
             <td>Discount offer</td>
             <td>Expiry Date</td>
             <td>Coupon Type</td>
-            <td>Actions</td>
+            <td>Status</td>
+            <td>Delete</td>
         </tr>
     </thead>
     <tbody>
@@ -26,6 +27,14 @@
             <td>{{ $data->expiry_date }}</td>
             <td>{{ $data->coupon_type }}</td>
             <td>{{ $data->status }}</td>
+            <td>
+            <form action="{{ route('coupon.destroy',$data->id) }}" method="post">
+            @csrf
+            @method('delete')
+            <button class="btn btn-warning">delete</button>
+            </form>
+            </td>
+
         </td>
     </tr>
     @endforeach

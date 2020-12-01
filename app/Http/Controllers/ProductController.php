@@ -22,6 +22,8 @@ class ProductController extends Controller
 
     public function apply(Request $request){
 
+
+        // Through query
         // $coupon = DB::table('coupons')
         // ->where('coupon_code', $request->coupon_code)
         // ->first();
@@ -35,11 +37,11 @@ class ProductController extends Controller
 
                 $total = 5000;
                 if($coupon->coupon_type == 'amount'){
-                    return $final_price = $total - $coupon->discount_value;
+                     $final_price = $total - $coupon->discount_value;
                 }
 
                 if($coupon->coupon_type == 'percentage'){
-                    return $final_price = $total * ($coupon->discount_value/100);
+                     $final_price = $total * ($coupon->discount_value/100);
                 }
 
                 return redirect()->route('product.show')
