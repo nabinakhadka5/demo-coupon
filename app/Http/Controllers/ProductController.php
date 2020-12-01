@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Shop;
 use App\Models\Coupon;
 use Illuminate\Http\Request;
+use Session;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -14,13 +18,42 @@ class ProductController extends Controller
     }
 
     public function index(Request $request){
-
-        return view('product.index');
+        $product = DB::table('shops')->get();
+        return view('product.index')->with('product',$product);
+    }
+    public function cart(){
+        return view('shop.cart');
     }
 
+    public function cartAdd(Shop $shop){
+        $cart = session()->get('cart');
+        if(!$cart){
+            $cart =[
+                $shop->id => [
+                    'title' => $shop->title,
+                    'price' => $shop->price,
+                    'quantity' => 1,
+                    'product_code' => $shop->product_code,
+                ]
+
+                ];
+                $data = session()->put('cart');
+
+                return redirect()->route('product.cart')->with('success','Added to Cart');
+        }
+
+            if(isset($cart[$shop->id])){
+                    $cart[$shop->id]['quantity']++;
+                    $data = session()->put('cart',$cart);
+
+            }
+
+            return redirect()->route('product.cart')->with('success','Added to Cart');
+
+    }
+
+
     public function apply(Request $request){
-
-
         // Through query
         // $coupon = DB::table('coupons')
         // ->where('coupon_code', $request->coupon_code)
@@ -53,4 +86,6 @@ class ProductController extends Controller
             'code' => $coupon->coupon_code,
         ]);
     }
+
+
 }
