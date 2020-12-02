@@ -64,7 +64,13 @@
                     <td>{{ $data['title'] }}</td>
                     <td>{{ $data['price'] }}</td>
                     <td>{{ $data['product_code'] }}</td>
-                        <td>Coupon code:{{ session()->get('coupon')['code'] }}, Discount Price is  : </td>
+                        <td>Coupon code:{{ session()->get('coupon')['code'] }}, Discount Price is  :
+                             @if (session()->get('coupon')['coupon_type'] == 'amount')
+                             {{ $data['price'] - session()->get('coupon')['discount_value'] }}
+                              @elseif (session()->get('coupon')['coupon_type'] == 'percentage')
+                                {{ $data['price'] * (session()->get('coupon')['discount_value'] /100)}}
+                                @endif
+                            </td>
 
                     </tr>
                     @endforeach
