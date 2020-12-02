@@ -18,7 +18,13 @@ Route::get('/', function () {
 });
 
 Route::resource('coupon','CouponController');
+Route::resource('/shop','shopController@index');
+
+Route::get('addcart/{shop}','cartController@cartAdd')->name('product.cartAdd');
+
+
+Route::get('/cart','CartController@cart')->name('product.cart');
+
 Route::get('/product','ProductController@index')->name('product.index');
-Route::get('/total','ProductController@show')->name('product.show');
 
 Route::post('/product','ProductController@apply')->name('product.create');

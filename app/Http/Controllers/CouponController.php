@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CouponRequest;
 use App\Models\Coupon;
 use Illuminate\Http\Request;
 
@@ -40,16 +41,9 @@ class CouponController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CouponRequest $request)
     {
-       $data =  $request->validate([
-            'coupon_code' => 'required|string',
-            'discount_value' => 'required',
-            'expiry_date' => 'required|date',
-            'coupon_type' => 'required',
-            'status' => 'required|in:active,inactive',
-        ]);
-
+        $data = $request->validated();
         $this->coupon->create($data);
         return redirect()->route('coupon.create');
     }
@@ -96,6 +90,9 @@ class CouponController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+        $data = $this->coupon->find($id);
+        $data->delete();
+        return redirect()->route('coupon.index');
     }
 }
