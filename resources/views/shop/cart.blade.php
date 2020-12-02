@@ -63,14 +63,15 @@
                 <tr>
                     <td>{{ $data['title'] }}</td>
                     <td>{{ $data['price'] }}</td>
-                        <td>{{ $data['product_code'] }}</td>
+                    <td>{{ $data['product_code'] }}</td>
+                        <td>Coupon code:{{ session()->get('coupon')['code'] }}, Discount Price is  : </td>
 
                     </tr>
                     @endforeach
                 </tbody>
             </table>
             @endif
-            {{ dd(session('data_session')) }}
+            {{ dd(session('coupon')['code']) }}
 </div>
 </div>
 </div>

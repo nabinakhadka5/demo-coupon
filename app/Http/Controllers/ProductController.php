@@ -36,11 +36,12 @@ class ProductController extends Controller
                $exp_date = $coupon->expiry_date;
                $current_date = date('Y-m-d');
                if($exp_date > $current_date ){
-
-
-
+                session()->put('coupon',[
+                    'code' => $coupon->coupon_code,
+                    'coupon_type' => $coupon->coupon_type,
+                    'discount_value' => $coupon->discount_value,
+                ]);
                 return redirect()->route('product.cart')->with('success','Coupon applied');
-
                } else {
                     return redirect()->route('product.cart')->with('error','Coupon expired.Please try again');
                 }
@@ -49,14 +50,6 @@ class ProductController extends Controller
             return redirect()->route('product.cart')->with('error','Invalid coupon code.Please try again');
        }
 
-       $coupon = session()->get('coupon');
-       if(!$coupon){
-        $coupon= [
-            'code' => $coupon->coupon_code,
-        ];
-
-        session()->put('coupon',$coupon);
-
+       }
     }
 
-    }}
